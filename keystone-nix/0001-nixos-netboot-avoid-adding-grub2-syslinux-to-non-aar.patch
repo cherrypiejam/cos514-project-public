@@ -1,0 +1,30 @@
+From bebd2d5e8c678c8d11a38b90f35a7463447c76c8 Mon Sep 17 00:00:00 2001
+From: Leon Schuermann <leon@is.currently.online>
+Date: Tue, 26 Sep 2023 07:46:58 -0400
+Subject: [PATCH] nixos/netboot: avoid adding grub2 & syslinux to non-aarch64
+ builds
+
+---
+ nixos/modules/installer/netboot/netboot.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nixos/modules/installer/netboot/netboot.nix b/nixos/modules/installer/netboot/netboot.nix
+index a50f22cbe471..5e9bd03c6aff 100644
+--- a/nixos/modules/installer/netboot/netboot.nix
++++ b/nixos/modules/installer/netboot/netboot.nix
+@@ -38,8 +38,8 @@ with lib;
+     boot.loader.grub.enable = false;
+ 
+     # !!! Hack - attributes expected by other modules.
+-    environment.systemPackages = [ pkgs.grub2_efi ]
+-      ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
++    environment.systemPackages = [ pkgs.grub2_efi ];
++      # ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
+ 
+     fileSystems."/" = mkImageMediaOverride
+       { fsType = "tmpfs";
+
+base-commit: 970a59bd19eff3752ce552935687100c46e820a5
+-- 
+2.40.1
+
